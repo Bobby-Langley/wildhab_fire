@@ -1,0 +1,23 @@
+{
+  "name": "wildhab_fire",
+  "version": "1.0.0",
+  "description": "testing firestore db",
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^9.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bobby-Langley/wildhab_fire.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bobby-Langley/wildhab_fire/issues"
+  },
+  "homepage": "https://github.com/Bobby-Langley/wildhab_fire#readme"
+}

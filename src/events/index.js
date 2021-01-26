@@ -2,11 +2,12 @@
 const admin = require("firebase-admin");
 const serviceAccount = require("../../wildhabitatexercise-firebase-adminsdk-z62ei-e63c217782.json");
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });  
-  const firestore = admin.firestore()
-
+if(!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+  })
+} 
+const firestore = admin.firestore()
 const eventRef = firestore.collection('events')
 
 exports.postEvent = (req, res) => {
@@ -53,7 +54,7 @@ exports.getEvents = (req, res) => {
             credential: admin.credential.cert(serviceAccount)
         })
     }
-     eventsRef.get()
+     eventRef.get()
           .then(collection => {
               const eventResults = collection.docs.map(doc => {
                   let event = doc.data()
@@ -77,3 +78,30 @@ exports.getEvents = (req, res) => {
            }) 
           })
      }
+
+     exports.updateAllEvents = (req, res) => {
+        if(!firestore) {
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount)
+            })
+            firestore = admin.firestore()
+        }
+        eventRef.update({
+           "updated all by": "bobby"
+        })
+            .then(() => {
+                res.status(200).json({
+                status: 'Updated All Successfully',
+                message: 'Event updated',
+                statusCode: '200'
+                })
+            })
+            .catch(err => {
+                res.status(500).json ({
+                    status: 'errrrrr',
+                    data: err,
+                    message: 'shits broke -- update err',
+                    statusCode: '500'
+                })
+            })
+    }

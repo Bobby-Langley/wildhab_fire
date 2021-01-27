@@ -38,3 +38,58 @@ const { userId } = req.params
            }) 
           })
      }
+
+
+exports.deleteSinglePerson = (req, res) => {
+  if(!firestore) {
+      admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount)
+      })
+      firestore = admin.firestore()
+  }
+  
+  personRef.doc(req.params.userId).delete()
+      .then(() => {
+          res.status(200).json({
+            status: 'successfully successful success',
+            message: 'Person deleted',
+            statusCode: '204'
+          })
+      })
+      .catch(err => {
+          res.status(500).send ({
+              status: 'errrrrr',
+              data: err,
+              message: 'shits broke',
+              statusCode: '500'
+          })
+      })
+}
+
+exports.updateSinglePerson = (req, res) => {
+  if(!firestore) {
+      admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount)
+      })
+      firestore = admin.firestore()
+  }
+  personRef.doc(req.params.userId)
+  .update(req.body)
+      .then(() => {
+          res.status(200).json({
+            status: 'Person updated successfully',
+            message: 'Person updated',
+            statusCode: '200'
+          })
+          return
+      })
+      .catch(err => {
+          res.status(500).json ({
+              status: 'errrrrr',
+              data: err,
+              message: 'shits broke -- update err',
+              statusCode: '500'
+          })
+      })
+
+}

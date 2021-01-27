@@ -76,7 +76,8 @@ exports.updateEvent = (req, res) => {
         })
         firestore = admin.firestore()
     }
-    eventRef.doc(req.params.eventId).update({
+    eventRef.doc(req.params.eventId)
+    .update({
         sport: "disc disc disc",
         rated: "M for mature",
         "Weather Forecast": "Who cares?"

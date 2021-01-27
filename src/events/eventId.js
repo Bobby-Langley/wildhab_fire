@@ -29,6 +29,8 @@ const { eventId } = req.params
                   message: 'Events loaded',
                   statusCode: '200'
                 })
+
+
           
           .catch(err => {
               console.log(err)

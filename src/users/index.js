@@ -25,7 +25,18 @@ exports.postPerson = (req, res) => {
         .then(docRef => {
             peopleRef.doc(docRef.id).get()
                 .then(snapshot => {
-                    let person = snapshot.data()
+                    let person = snapshot.data({
+                        name: "17"
+                    }
+                    )
+    if(Object.keys(req.body.first_name).length === 0 || req.body.first_name === undefined || req.body.first_name === null ){
+        res.send({
+            message: "Invalid first name: must be at least one character, A-Z"
+        })
+        return
+    }
+
+   
                     person.id = snapshot.id
                     res.status(200).json({
                         status: 'successfully successful success',

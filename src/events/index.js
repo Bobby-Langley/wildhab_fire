@@ -9,6 +9,8 @@ if(!admin.apps.length) {
 } 
 const firestore = admin.firestore()
 const eventRef = firestore.collection('events')
+const validProps = ["name", "date", "sport", "desc", "state"]
+
 
 exports.postEvent = (req, res) => {
     if(!firestore) {
@@ -16,10 +18,40 @@ exports.postEvent = (req, res) => {
             credential: admin.credential.cert(serviceAccount)
         })
     }
+       
+    if(Object.keys(req.body).length === 0 || req.body === undefined){
+        res.send({
+            message: "No event defined"
+        })
+        return
+    }
+
+    if(req.body.name === null){
+        res.send({
+            message: "Event name required!!!"
+        })
+        return
+    }
+
+    if(typeof req.body.name !== 'string'){
+        res.send({
+            message: "Invalid event name"
+        })
+        return
+    }
+    const invalid = Object.keys(req.body).some(prop => !validProps.includes(prop)) 
+    if(invalid){
+        res.send({
+            message: "Invalid Property"
+        })
+        return
+    }
+
     let newEvent = req.body
     let now = admin.firestore.FieldValue.serverTimestamp()
     newEvent.updated = now 
     newEvent.created = now
+
 
     eventRef.add(newEvent)
         .then(docRef => {
@@ -43,10 +75,9 @@ exports.postEvent = (req, res) => {
               data: err,
               message: 'shits broke',
               statusCode: '500'
-          
-              }) 
+              })
         })
-}
+    }
 
 exports.getEvents = (req, res) => {
     if(!firestore) {
@@ -78,30 +109,3 @@ exports.getEvents = (req, res) => {
            }) 
           })
      }
-
-     exports.updateAllEvents = (req, res) => {
-        if(!firestore) {
-            admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount)
-            })
-            firestore = admin.firestore()
-        }
-        eventRef.update({
-           "updated all by": "bobby"
-        })
-            .then(() => {
-                res.status(200).json({
-                status: 'Updated All Successfully',
-                message: 'Event updated',
-                statusCode: '200'
-                })
-            })
-            .catch(err => {
-                res.status(500).json ({
-                    status: 'errrrrr',
-                    data: err,
-                    message: 'shits broke -- update err',
-                    statusCode: '500'
-                })
-            })
-    }
